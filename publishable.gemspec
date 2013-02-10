@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email        = "m@hawx.me"
   s.summary      = "A short summary of what it does."
   s.homepage     = "http://github.com/hawx/publishable"
-  s.version      = Publish::VERSION
+  s.version      = Publishable::VERSION
 
   s.description  = <<-DESC
     A long form description. Nicely indented and wrapped at ~70 chars.
@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   # s.add_development_dependency 'some-gem', '~> X.X.X'
 
   s.files        = %w(README.md Rakefile LICENCE)
-  s.files       += Dir["{bin,lib,man,test,spec}/**/*"] & `git ls-files`.split("\n")
-  s.test_files   = Dir["{test,spec}/**/*"] & `git ls-files`.split("\n")
-  s.executables  = %w(publish)
+  s.files       += Dir["{lib,spec}/**/*"] & `git ls-files`.split("\n")
+  s.test_files   = Dir["{spec}/**/*"] & `git ls-files`.split("\n")
 end
