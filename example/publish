@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require_relative '../lib/publishable'
+
+class Item
+  include Publishable::File
+
+  attr_reader :path, :url
+
+  def initialize(path)
+    @path = path.expand_path.to_s
+    @url = "/" + path.to_s
+  end
+end
+
+class Items
+  include Publishable::Site
+
+  def initialize(dir)
+    @dir = Pathname.new(dir).cleanpath
+  end
+
+  def each(&block)
+    load.each &block
+  end
+
+  private
+
+  def load
+    @items ||=
+      Pathname.glob(@dir + '*.*')
+      .map(&:cleanpath)
+      .map {|i| Item.new(i) }
+  end
+end
+
+items = Items.new(__FILE__ + '/../items')
+
+config = {
+  host: 'some.example.net',
+  base: '/home/public',
+  user: 'user_name',
+  pass: 'my_secret_password'
+}
+
+items.publish(__FILE__ + '/../hashes.store', config)

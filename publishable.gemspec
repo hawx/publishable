@@ -1,12 +1,12 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path("../lib/publish/version", __FILE__)
+require File.expand_path("../lib/publishable/version", __FILE__)
 
 Gem::Specification.new do |s|
-  s.name         = "publish"
+  s.name         = "publishable"
   s.author       = "Joshua Hawxwell"
   s.email        = "m@hawx.me"
   s.summary      = "A short summary of what it does."
-  s.homepage     = "http://github.com/hawx/publish"
+  s.homepage     = "http://github.com/hawx/publishable"
   s.version      = Publish::VERSION
 
   s.description  = <<-DESC
