@@ -123,11 +123,11 @@ module Publishable
 
           # Make directories as required
           remote.dirname.descend do |sub_dir|
-            mkdir!(sub_dir) unless exist?(sub_dir)
+            sftp.mkdir!(sub_dir) unless sftp.exist?(sub_dir)
           end
 
           # Now write the file, force encoding to fix issues
-          file.open(remote.to_s, 'w') do |f|
+          sftp.file.open(remote.to_s, 'w') do |f|
             f.puts item.contents.force_encoding('binary')
           end
 
