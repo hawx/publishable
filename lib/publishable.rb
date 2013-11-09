@@ -3,6 +3,7 @@ require 'pstore'
 require 'net/sftp'
 
 module Publishable
+  VERSION = '0.0.2'
 
   # This is the interface items must fulfill.
   module ItemInterface
@@ -91,7 +92,7 @@ module Publishable
       changed = []
       each do |item|
         hashes.transaction do
-          changed << item unless hashes[item.path] == item.digest
+          changed << item unless hashes[item.url] == item.digest
         end
       end
 
@@ -118,7 +119,7 @@ module Publishable
 
           # Update hashes
           hashes.transaction do
-            hashes[item.path] = item.digest
+            hashes[item.url] = item.digest
           end
 
           # Make directories as required
@@ -132,7 +133,7 @@ module Publishable
           end
 
           # Finally say that the item has been uploaded
-          output.call(:uploaded, item.path, remote)
+          output.call(:uploaded, item.url, remote)
         end
       end
     end
