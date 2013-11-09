@@ -1,9 +1,10 @@
+require 'highline'
 require 'digest/md5'
 require 'pstore'
 require 'net/sftp'
 
 module Publishable
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
 
   # This is the interface items must fulfill.
   module ItemInterface
