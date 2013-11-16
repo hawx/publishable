@@ -53,12 +53,36 @@ module Publishable
     #
     # @param config [Hash{Symbol=>String}] Configuraton for the server.
     # @opts config [String] :host
+    #   Host to connect to.
+    #
     # @opts config [String] :base
+    #   Base path to write to. So a local file ./test.txt will be written to
+    #   #{base}/test.txt on the server.
+    #
     # @opts config [String] :user
+    #   Username to login with.
+    #
     # @opts config [String] :pass
+    #   Password for the user, key-based authentication is automatically tried
+    #   first, so this option can be left as an empty string to only use
+    #   keys. Note: if not given you will be prompted for a password.
+    #
+    # @opts config [Hash] :ssh
+    #   Any extra options to be passed when opening the ssh connection,
+    #   eg. port. Still use :pass for the password or you will be asked to enter
+    #   it.
     #
     # @param output [Block]
+    #  Output defines what will be printed upon events. The event type is passed
+    #  as a symbol as the first argument, the second argument is the local path
+    #  and the third is the remote. There are two event types:
+    #   * :no_change
+    #   * :uploaded
+    #  See the default block set for an example.
+    #
     def publish(store, config, &output)
+      config[:ssh] ||= {}
+
       # If an output block is not given, create a basic default. In reality this
       # should be good enough 99% of the time.
       unless block_given?
@@ -76,8 +100,10 @@ module Publishable
       hashes = PStore.new(::File.expand_path(store))
 
       # Fix up config, get password if not given, then check we have keys
-      unless config.key?(:pass)
-        config[:pass] = Highline.new.ask("Enter password: ") {|q| q.echo = "*" }
+      if config.key?(:pass)
+        config[:ssh][:password] = config[:pass]
+      else
+        config[:ssh][:password] = Highline.new.ask("Enter password: ") {|q| q.echo = "*" }
       end
 
       config[:base] = Pathname.new(config[:base])
@@ -101,7 +127,7 @@ module Publishable
       end
 
       # Now begin the SFTP session, since items have changed.
-      Net::SFTP.start config[:host], config[:user], password: config[:pass] do |sftp|
+      Net::SFTP.start config[:host], config[:user], config[:ssh] do |sftp|
 
         # Helper method to check whether the path given exists on the remote
         # server.
