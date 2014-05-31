@@ -5,20 +5,16 @@ Gem::Specification.new do |s|
   s.name         = "publishable"
   s.author       = "Joshua Hawxwell"
   s.email        = "m@hawx.me"
-  s.summary      = "A short summary of what it does."
+  s.summary      = "Easier publishing of static sites"
   s.homepage     = "http://github.com/hawx/publishable"
   s.version      = Publishable::VERSION
 
   s.description  = <<-DESC
-    A long form description. Nicely indented and wrapped at ~70 chars.
-    Here's a measuring line for you. (Don't keep this in when releasing.)
-    ----------------------------------------------------------------------
+    Provides mixins for allowing a couple of classes representing a
+    website to be published using SFTP.
   DESC
 
-  # s.add_dependency 'some-gem', '~> X.X.X'
-  # s.add_development_dependency 'some-gem', '~> X.X.X'
-
-  s.files        = %w(README.md Rakefile LICENCE)
+  s.files        = %w(README.md Rakefile LICENSE)
   s.files       += Dir["{lib,spec}/**/*"] & `git ls-files`.split("\n")
   s.test_files   = Dir["{spec}/**/*"] & `git ls-files`.split("\n")
 end
